@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
+
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -43,7 +46,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -56,7 +59,23 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
+        final TextView description = findViewById(R.id.description_tv);
+        description.setText(sandwich.getDescription());
+        final TextView alsoKnownAs = findViewById(R.id.also_known_tv);
+        alsoKnownAs.setText(generateText(sandwich.getAlsoKnownAs()));
+        final TextView ingredients = findViewById(R.id.ingredients_tv);
+        ingredients.setText(generateText(sandwich.getIngredients()));
+        final TextView placeOfOrigin = findViewById(R.id.origin_tv);
+        placeOfOrigin.setText(sandwich.getPlaceOfOrigin());
+    }
 
+    private String generateText(List<String> toConcat) {
+        final StringBuilder concat = new StringBuilder();
+        for (String option : toConcat) {
+            concat.append(option);
+            concat.append("\n");
+        }
+        return concat.toString();
     }
 }
